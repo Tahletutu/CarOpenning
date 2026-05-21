@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TurboBox Garage</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Box opening • Cars • Tuning</p>
+        <h1>TurboBox Garage</h1>
+      </div>
+      <div class="wallet-card">
+        <span>Argent</span>
+        <strong id="moneyLabel">0 €</strong>
+        <button class="ghost-btn" id="saveBtn" title="Sauvegarder">💾</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Navigation principale">
+      <button class="tab active" data-tab="boxes">🎁 Box</button>
+      <button class="tab" data-tab="garage">🏎️ Garage</button>
+      <button class="tab" data-tab="inventory">🧰 Inventaire</button>
+      <button class="tab" data-tab="minigames">🎮 Mini-jeux</button>
+    </nav>
+
+    <main>
+      <section id="boxes" class="panel active-panel">
+        <div class="hero-card">
+          <div>
+            <p class="eyebrow">Pack opening</p>
+            <h2>Ouvre des box, drop des pièces ou des voitures complètes.</h2>
+            <p>Monte les meilleures pièces sur ta voiture, combine les doublons et revends ce qui ne sert plus.</p>
+          </div>
+          <div class="hero-car" aria-hidden="true">
+            <div class="car-glow"></div>
+            <div class="car-body"></div>
+            <div class="wheel wheel-left"></div>
+            <div class="wheel wheel-right"></div>
+          </div>
+        </div>
+
+        <div id="boxGrid" class="card-grid"></div>
+      </section>
+
+      <section id="garage" class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Garage</p>
+            <h2>Tes voitures</h2>
+          </div>
+          <button class="primary-btn" id="quickBoxBtn">Ouvrir une box</button>
+        </div>
+        <div id="selectedCar" class="selected-car empty-state"></div>
+        <div id="garageGrid" class="card-grid"></div>
+      </section>
+
+      <section id="inventory" class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Inventaire</p>
+            <h2>Pièces & voitures à vendre</h2>
+          </div>
+          <div class="filter-row">
+            <button class="chip active" data-filter="all">Tout</button>
+            <button class="chip" data-filter="engine">Moteurs</button>
+            <button class="chip" data-filter="turbo">Turbos</button>
+            <button class="chip" data-filter="tires">Pneus</button>
+            <button class="chip" data-filter="brakes">Freins</button>
+            <button class="chip" data-filter="body">Carrosserie</button>
+          </div>
+        </div>
+
+        <div class="combine-box">
+          <div>
+            <h3>Combinaison de pièces</h3>
+            <p>Sélectionne 3 pièces du même type et de la même rareté pour obtenir une pièce de rareté supérieure.</p>
+            <p id="combineStatus">Aucune pièce sélectionnée.</p>
+          </div>
+          <button class="accent-btn" id="combineBtn" disabled>Combiner</button>
+        </div>
+
+        <div id="inventoryGrid" class="card-grid"></div>
+      </section>
+
+      <section id="minigames" class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Quand t’es broke</p>
+            <h2>Mini-jeux pour gagner de l’argent</h2>
+          </div>
+          <span class="hint">Astuce : plus tu es précis, plus tu gagnes.</span>
+        </div>
+
+        <div class="mini-grid">
+          <article class="mini-card">
+            <h3>Départ parfait</h3>
+            <p>Clique au moment où les feux passent au vert. Trop tôt = petit malus.</p>
+            <div class="lights" id="lights">
+              <span></span><span></span><span></span>
+            </div>
+            <button class="primary-btn" id="reactionBtn">Lancer</button>
+            <p class="mini-result" id="reactionResult">Prêt ?</p>
+          </article>
+
+          <article class="mini-card">
+            <h3>Atelier express</h3>
+            <p>Tu as 8 secondes pour cliquer un max et réparer des caisses au garage.</p>
+            <div class="click-zone" id="workshopZone">🔧</div>
+            <button class="primary-btn" id="workshopBtn">Commencer</button>
+            <p class="mini-result" id="workshopResult">Réparations : 0</p>
+          </article>
+
+          <article class="mini-card">
+            <h3>Drift timing</h3>
+            <p>Arrête le curseur au centre de la zone dorée pour faire un drift propre.</p>
+            <div class="timing-bar" id="timingBar">
+              <div class="sweet-spot"></div>
+              <div class="pointer" id="timingPointer"></div>
+            </div>
+            <button class="primary-btn" id="timingBtn">Démarrer</button>
+            <p class="mini-result" id="timingResult">Score : -</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="openingModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card">
+      <div class="pack-stage">
+        <div class="pack-lid"></div>
+        <div class="pack-box">TURBO<br />BOX</div>
+        <div class="sparks"></div>
+      </div>
+      <div class="roulette-window">
+        <div id="rouletteTrack" class="roulette-track"></div>
+        <div class="center-marker"></div>
+      </div>
+      <div id="rewardReveal" class="reward-reveal"></div>
+      <button class="primary-btn hidden" id="closeModalBtn">Récupérer</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
